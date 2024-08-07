@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate images from text and interact with an AI chatbot. Explore image generation and AI chat capabilities.">
+    <meta name="keywords" content="text to image, AI chatbot, image generation, artificial intelligence, Hugging Face API">
+    <meta name="author" content="Your Name or Company">
+    <meta property="og:title" content="Text to Image and AI Chat">
+    <meta property="og:description" content="Generate images from text and interact with an AI chatbot using advanced AI technologies.">
+    <meta property="og:image" content="URL_TO_PREVIEW_IMAGE">
+    <meta property="og:url" content="YOUR_PAGE_URL">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Text to Image and AI Chat">
+    <meta name="twitter:description" content="Generate images from text and interact with an AI chatbot using advanced AI technologies.">
+    <meta name="twitter:image" content="URL_TO_PREVIEW_IMAGE">
+    <title>Text to Image and AI Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        #app {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+        select, input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        .chat-message {
+            background: #f9f9f9;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            white-space: pre-wrap; /* Preserve formatting */
+        }
+        .chat-message code {
+            background: #eee;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Text to Image and AI Chat</h1>
+        <select id="type">
+            <option value="image">Generate Image</option>
+            <option value="ai-chat">Ask AI Chat</option>
+        </select>
+        <input type="text" id="prompt" placeholder="Enter your query or description">
+        <button id="generate">Generate</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('generate').addEventListener('click', async () => {
+            const prompt = document.getElementById('prompt').value;
+            const type = document.getElementById('type').value;
+            if (!prompt) return;
+
+            const button = document.getElementById('generate');
+            button.disabled = true;
+            button.textContent = 'Generating...';
+
+            try {
+                let url, method, body;
+                let headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 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' // API token Hugging Face
+                };
+
+                if (type === 'image') {
+                    url = 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1';
+                    method = 'POST';
+                    body = JSON.stringify({ inputs: prompt });
+                } else if (type === 'ai-chat') {
+                    url = 'https://api-inference.huggingface.co/models/OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5';
+                    method = 'POST';
+                    body = JSON.stringify({ inputs: prompt });
+                }
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: headers,
+                    body: body
+                });
+
+                if (!response.ok) {
+                    const errorDetails = await response.json();
+                    throw new Error(`Error: ${response.status} ${response.statusText}\n${JSON.stringify(errorDetails)}`);
+                }
+
+                let result;
+                if (type === 'image') {
+                    result = await response.blob();
+                    const mediaElement = document.createElement('img');
+                    mediaElement.src = URL.createObjectURL(result);
+                    document.getElementById('result').innerHTML = '';
+                    document.getElementById('result').appendChild(mediaElement);
+                } else if (type === 'ai-chat') {
+                    result = await response.json();
+                    const message = document.createElement('div');
+                    message.className = 'chat-message';
+                    message.innerHTML = result[0]?.generated_text.replace(/(?:\r\n|\r|\n)/g, '<br>') || 'No response';
+                    document.getElementById('result').innerHTML = '';
+                    document.getElementById('result').appendChild(message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').textContent = `Failed to process ${type}: ${error.message}`;
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Generate';
+            }
+        });
+    </script>
+</body>
+</html>
