@@ -5,158 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Generate images from text and interact with an AI chatbot. Explore image generation and AI chat capabilities.">
     <meta name="keywords" content="text to image, AI chatbot, image generation, artificial intelligence, Hugging Face API">
-    <meta name="author" content="Your Name or Company">
+    <meta name="author" content="Wanzzbot">
     <meta property="og:title" content="Text to Image and AI Chat">
     <meta property="og:description" content="Generate images from text and interact with an AI chatbot using advanced AI technologies.">
-    <meta property="og:image" content="URL_TO_PREVIEW_IMAGE">
-    <meta property="og:url" content="YOUR_PAGE_URL">
+    <meta property="og:image" content="assets/img/preview.jpg">
+    <meta property="og:url" content="https://yourdomain.com">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Text to Image and AI Chat">
     <meta name="twitter:description" content="Generate images from text and interact with an AI chatbot using advanced AI technologies.">
-    <meta name="twitter:image" content="URL_TO_PREVIEW_IMAGE">
-    <title>Text to Image and AI Chat</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
-        #app {
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-        }
-        select, input, button {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        img {
-            margin-top: 20px;
-            max-width: 100%;
-        }
-        #result {
-            margin-top: 20px;
-        }
-        .chat-message {
-            background: #f9f9f9;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 5px 0;
-            white-space: pre-wrap; /* Preserve formatting */
-        }
-        .chat-message code {
-            background: #eee;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-    </style>
+    <meta name="twitter:image" content="assets/img/preview.jpg">
+    <title>AI Creation Studio | Image Generation & Chat</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="assets/img/logo.svg">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div id="app">
-        <h1>Text to Image and AI Chat</h1>
-        <select id="type">
-            <option value="image">Generate Image</option>
-            <option value="ai-chat">Ask AI Chat</option>
-        </select>
-        <input type="text" id="prompt" placeholder="Enter your query or description">
-        <button id="generate">Generate</button>
-        <button id="download" style="display:none;">Download</button>
-        <div id="result"></div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="assets/img/logo.svg" alt="AI Creation Studio Logo">
+                <h1>AI Creation Studio</h1>
+            </div>
+            <div class="theme-toggle">
+                <button id="theme-switch"><i class="fas fa-moon"></i></button>
+            </div>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="image">
+                    <i class="fas fa-image"></i> Generate Image
+                </button>
+                <button class="tab-btn" data-tab="chat">
+                    <i class="fas fa-comment-dots"></i> AI Chat
+                </button>
+            </div>
+
+            <div class="content-area">
+                <div id="image-tab" class="tab-content active">
+                    <h2>Create Images from Text</h2>
+                    <div class="input-group">
+                        <textarea id="image-prompt" placeholder="Describe the image you want to create..."></textarea>
+                        <div class="controls">
+                            <select id="image-model">
+                                <option value="stabilityai/stable-diffusion-2-1">Stable Diffusion 2.1</option>
+                                <option value="prompthero/openjourney">Openjourney</option>
+                                <option value="runwayml/stable-diffusion-v1-5">Stable Diffusion 1.5</option>
+                            </select>
+                            <button id="generate-image" class="primary-btn">
+                                <i class="fas fa-wand-magic-sparkles"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                    <div class="result-container">
+                        <div id="image-loading" class="loading-indicator">
+                            <div class="spinner"></div>
+                            <p>Creating your masterpiece...</p>
+                        </div>
+                        <div id="image-result" class="result"></div>
+                        <button id="download-image" class="secondary-btn">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <div id="chat-tab" class="tab-content">
+                    <h2>Chat with AI Assistant</h2>
+                    <div class="chat-container">
+                        <div id="chat-history" class="chat-history">
+                            <div class="chat-message system">
+                                <div class="avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message">
+                                    Hello! I'm your AI assistant. How can I help you today?
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <textarea id="chat-prompt" placeholder="Type your message here..."></textarea>
+                            <button id="send-chat" class="primary-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 AI Creation Studio | Powered by Hugging Face API</p>
+            <div class="social-links">
+                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </footer>
     </div>
 
-    <script>
-        document.getElementById('generate').addEventListener('click', async () => {
-            const prompt = document.getElementById('prompt').value;
-            const type = document.getElementById('type').value;
-            const downloadButton = document.getElementById('download');
-            if (!prompt) return;
-
-            const button = document.getElementById('generate');
-            button.disabled = true;
-            button.textContent = 'Generating...';
-
-            try {
-                let url, method, body;
-                let headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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' // API token Hugging Face
-                };
-
-                if (type === 'image') {
-                    url = 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1';
-                    method = 'POST';
-                    body = JSON.stringify({ inputs: prompt });
-                } else if (type === 'ai-chat') {
-                    url = 'https://api-inference.huggingface.co/models/OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5';
-                    method = 'POST';
-                    body = JSON.stringify({ inputs: prompt });
-                }
-
-                const response = await fetch(url, {
-                    method: method,
-                    headers: headers,
-                    body: body
-                });
-
-                if (!response.ok) {
-                    const errorDetails = await response.json();
-                    throw new Error(`Error: ${response.status} ${response.statusText}\n${JSON.stringify(errorDetails)}`);
-                }
-
-                let result;
-                if (type === 'image') {
-                    result = await response.blob();
-                    const mediaElement = document.createElement('img');
-                    mediaElement.src = URL.createObjectURL(result);
-                    document.getElementById('result').innerHTML = '';
-                    document.getElementById('result').appendChild(mediaElement);
-
-                    // Show download button for image
-                    downloadButton.style.display = 'block';
-                    downloadButton.onclick = () => {
-                        const link = document.createElement('a');
-                        link.href = mediaElement.src;
-                        link.download = 'stable-diffusion-ai.png';
-                        link.click();
-                    };
-                } else if (type === 'ai-chat') {
-                    result = await response.json();
-                    const message = document.createElement('div');
-                    message.className = 'chat-message';
-                    message.innerHTML = result[0]?.generated_text.replace(/(?:\r\n|\r|\n)/g, '<br>') || 'No response';
-                    document.getElementById('result').innerHTML = '';
-                    document.getElementById('result').appendChild(message);
-
-                    // Hide download button for chat response
-                    downloadButton.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('result').textContent = `Failed to process ${type}: ${error.message}`;
-            } finally {
-                button.disabled = false;
-                button.textContent = 'Generate';
-            }
-        });
-    </script>
+    <script src="assets/js/imageGenerator.js"></script>
+    <script src="assets/js/aiChat.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
