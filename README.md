@@ -61,7 +61,7 @@ In a production environment, you should:
 
 - Fonts: Segoe UI, Tahoma, Geneva, Verdana, sans-serif
 - Icons: Font Awesome 6.4.0
-- API: Hugging Face Inference API
+- API: Hugging Face Inference API and Gemini API
 
 Check this out
 
