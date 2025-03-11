@@ -43,7 +43,7 @@ This application uses Hugging Face's Inference API for both image generation and
 - Stable Diffusion 1.5
 
 ### AI Chat Model:
-- OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5
+- Gemini API
 
 ## Security Note
 
