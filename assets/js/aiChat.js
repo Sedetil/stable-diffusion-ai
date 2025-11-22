@@ -1,6 +1,6 @@
 // Configuration
 const CHAT_API_CONFIG = {
-    apiKey: 'AIzaSyAtHg0tRxL2n4oOwnb6A679sAXkICrDtVM', // Store in environment variable in production
+    apiKey: 'AIzaSyB0NX9p8WxhTldqpdEkEkIyC7qq5xUjoHw', // Store in environment variable in production
     baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash',
 };
 
